@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Daftar Karyawan — iceKnodcorp ATD System</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .hidden-btn { display: none !important; }
+</style>
+</head>
+<body>
+
+<div class="auth-shell">
+    <aside class="auth-visual">
+        <div data-brand-visual class="brand"></div>
+
+        <svg class="auth-visual__lattice" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="#6FD6E8" stroke-width="0.6" opacity="0.35">
+                <line x1="0" y1="180" x2="500" y2="180"/>
+                <line x1="0" y1="420" x2="500" y2="420"/>
+                <line x1="180" y1="0" x2="180" y2="700"/>
+                <line x1="380" y1="0" x2="380" y2="700"/>
+            </g>
+        </svg>
+
+        <div class="auth-visual__copy">
+            <h1>Satu kali pindai wajah, absensi seumur kerja terverifikasi.</h1>
+            <p>Saat mendaftar, sistem merekam pola wajah Anda secara lokal di perangkat. Data ini menjadi kunci verifikasi setiap kali Anda check-in dan check-out.</p>
+        </div>
+
+        <div class="auth-visual__stats">
+            <div><strong>128-D</strong><span>VEKTOR WAJAH</span></div>
+            <div><strong>On-device</strong><span>PEMROSESAN KAMERA</span></div>
+        </div>
+    </aside>
+
+    <main class="auth-form-wrap">
+        <div class="auth-card" style="max-width: 440px;">
+            <div data-brand class="brand" style="margin-bottom:24px;"></div>
+            <div class="auth-card__head">
+                <h2>Daftar sebagai karyawan baru</h2>
+                <p>Lengkapi data diri dan rekam wajah Anda untuk verifikasi absensi.</p>
+            </div>
+
+            <div id="registerAlert" class="alert"></div>
+
+            <form id="registerForm" novalidate>
+                <div class="field-row">
+                    <div class="field">
+                        <label for="regCode">Kode Karyawan</label>
+                        <input type="text" id="regCode" placeholder="EMP-0123" required>
+                    </div>
+                    <div class="field">
+                        <label for="regName">Nama Lengkap</label>
+                        <input type="text" id="regName" placeholder="Nama Anda" required>
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="regEmail">Email Perusahaan</label>
+                    <input type="email" id="regEmail" placeholder="nama@iceknodcorp.com" required>
+                </div>
+
+                <div class="field-row">
+                    <div class="field">
+                        <label for="regDept">Departemen</label>
+                        <input type="text" id="regDept" placeholder="Mis. Operasional">
+                    </div>
+                    <div class="field">
+                        <label for="regPosition">Jabatan</label>
+                        <input type="text" id="regPosition" placeholder="Mis. Staff">
+                    </div>
+                </div>
+
+                <div class="field">
+                    <label for="regPassword">Password</label>
+                    <input type="password" id="regPassword" placeholder="Minimal 8 karakter" required minlength="8">
+                </div>
+
+                <div class="field">
+                    <label>Verifikasi Wajah</label>
+                    <div class="face-scan" id="faceScan">
+                        <video id="faceVideo" muted playsinline></video>
+                        <div class="face-scan__frame">
+                            <div class="face-scan__corner face-scan__corner--tl"></div>
+                            <div class="face-scan__corner face-scan__corner--tr"></div>
+                            <div class="face-scan__corner face-scan__corner--bl"></div>
+                            <div class="face-scan__corner face-scan__corner--br"></div>
+                        </div>
+                        <div class="face-scan__sweep"></div>
+                        <div id="faceStatus" class="face-scan__status state-idle"><span class="dot"></span>Kamera belum aktif</div>
+                    </div>
+
+                    <button type="button" id="startCameraBtn" class="btn btn-ghost">Aktifkan Kamera</button>
+                    <button type="button" id="captureFaceBtn" class="btn btn-accent hidden-btn">Ambil &amp; Kunci Wajah</button>
+                    <button type="button" id="retakeFaceBtn" class="btn btn-ghost hidden-btn">Ambil Ulang</button>
+                    <p class="hint">Wajah Anda diproses langsung di browser dan disimpan sebagai vektor angka (bukan gambar mentah) untuk verifikasi absensi.</p>
+                </div>
+
+                <button type="submit" id="registerSubmit" class="btn btn-primary" style="margin-top:8px;">Daftar Sekarang</button>
+            </form>
+
+            <p class="auth-switch">Sudah punya akun? <a href="index.html">Masuk di sini</a></p>
+        </div>
+    </main>
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/face-verification.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

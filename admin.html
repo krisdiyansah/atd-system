@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Panel Admin — iceKnodcorp ATD System</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .activity-list { list-style: none; margin: 0; padding: 0; max-height: 480px; overflow-y: auto; }
+    .activity-list li { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+    .activity-list li:last-child { border-bottom: none; }
+    .activity-list strong { font-size: 0.82rem; text-transform: capitalize; }
+    .activity-list span { font-size: 0.8rem; color: var(--steel-gray); }
+    .activity-list time { font-size: 0.72rem; font-family: var(--font-mono); color: var(--steel-gray-2); }
+    .two-col { display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+    <aside class="sidebar" id="sidebar">
+        <div data-brand class="brand"></div>
+
+        <nav class="nav-group">
+            <div class="nav-label">Menu Admin</div>
+            <a class="nav-link active" href="admin.html">
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H7a4 4 0 00-4 4v2M9 11a4 4 0 100-8 4 4 0 000 8zM23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+                Kelola Karyawan
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-chip__avatar" id="userInitial"></div>
+                <div class="user-chip__meta">
+                    <strong id="userName">—</strong>
+                    <span id="userRole">—</span>
+                </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn" style="width:100%;">Keluar</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="mobile-topbar">
+            <button id="sidebarToggle" aria-label="Buka menu">☰</button>
+            <div data-brand class="brand"></div>
+            <span style="width:24px;"></span>
+        </div>
+
+        <div class="topbar">
+            <div>
+                <h1>Panel Admin</h1>
+                <p>Kelola data akun karyawan dan pantau log aktivitas sistem ATD.</p>
+            </div>
+            <button class="btn btn-primary" id="addEmployeeBtn" style="width:auto;">+ Tambah Karyawan</button>
+        </div>
+
+        <div class="kpi-grid" style="grid-template-columns: repeat(3, 1fr);">
+            <div class="kpi-card"><span>Total Karyawan</span><strong id="kpiTotal">0</strong></div>
+            <div class="kpi-card"><span>Akun Aktif</span><strong id="kpiActive">0</strong></div>
+            <div class="kpi-card"><span>Akun Admin</span><strong id="kpiAdmin">0</strong></div>
+        </div>
+
+        <div class="two-col">
+            <section class="card">
+                <div class="card__head"><h3>Data Karyawan</h3></div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Kode</th><th>Nama</th><th>Email</th><th>Departemen</th><th>Role</th><th>Status</th><th>Aksi</th></tr>
+                        </thead>
+                        <tbody id="employeeBody"></tbody>
+                    </table>
+                    <div class="empty-state" id="employeeEmpty" style="display:none;">Belum ada data karyawan.</div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card__head"><h3>Log Aktivitas Sistem</h3></div>
+                <ul class="activity-list" id="activityList"></ul>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- Modal tambah / edit karyawan -->
+<div class="modal-overlay" id="employeeModal">
+    <div class="modal">
+        <div class="modal__head">
+            <h3 id="modalTitle">Tambah Karyawan</h3>
+            <button class="modal__close" id="modalClose" aria-label="Tutup">&times;</button>
+        </div>
+
+        <div id="modalAlert" class="alert"></div>
+
+        <form id="employeeForm">
+            <div class="field-row">
+                <div class="field">
+                    <label for="empCode">Kode Karyawan</label>
+                    <input type="text" id="empCode" required>
+                </div>
+                <div class="field">
+                    <label for="empName">Nama Lengkap</label>
+                    <input type="text" id="empName" required>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="empEmail">Email</label>
+                <input type="email" id="empEmail" required>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="empDept">Departemen</label>
+                    <input type="text" id="empDept">
+                </div>
+                <div class="field">
+                    <label for="empPosition">Jabatan</label>
+                    <input type="text" id="empPosition">
+                </div>
+            </div>
+
+            <div class="field-row">
+                <div class="field">
+                    <label for="empRole">Role</label>
+                    <select id="empRole">
+                        <option value="employee">Karyawan</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <div class="field" id="empStatusRow">
+                    <label for="empStatus">Status</label>
+                    <select id="empStatus">
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Nonaktif</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="field">
+                <label for="empPassword">Password</label>
+                <input type="password" id="empPassword" minlength="8">
+            </div>
+
+            <p class="hint">Pendaftaran wajah dilakukan mandiri oleh karyawan melalui halaman <em>Daftar</em> saat pertama kali login, karena memerlukan akses kamera langsung dari perangkat karyawan.</p>
+
+            <div style="display:flex; gap:10px; margin-top:18px;">
+                <button type="button" class="btn btn-ghost" id="modalCancel">Batal</button>
+                <button type="submit" class="btn btn-primary" id="modalSubmit">Simpan</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/admin.js"></script>
+</body>
+</html>

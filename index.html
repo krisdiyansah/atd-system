@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Masuk — iceKnodcorp ATD System</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+    <!-- Panel visual kiri -->
+    <aside class="auth-visual">
+        <div data-brand-visual class="brand"></div>
+
+        <svg class="auth-visual__lattice" viewBox="0 0 500 700" xmlns="http://www.w3.org/2000/svg">
+            <g stroke="#6FD6E8" stroke-width="0.6" opacity="0.35">
+                <line x1="0" y1="120" x2="500" y2="120"/>
+                <line x1="0" y1="320" x2="500" y2="320"/>
+                <line x1="0" y1="520" x2="500" y2="520"/>
+                <line x1="120" y1="0" x2="120" y2="700"/>
+                <line x1="320" y1="0" x2="320" y2="700"/>
+            </g>
+            <g stroke="#6FD6E8" stroke-width="1" opacity="0.5">
+                <circle cx="120" cy="120" r="3"/>
+                <circle cx="320" cy="320" r="3"/>
+                <circle cx="120" cy="520" r="3"/>
+                <circle cx="320" cy="120" r="3"/>
+            </g>
+        </svg>
+
+        <div class="auth-visual__copy">
+            <h1>Absensi karyawan yang terverifikasi, bukan sekadar tercatat.</h1>
+            <p>iceKnodcorp ATD System mencatat setiap kehadiran dengan verifikasi wajah langsung dari perangkat karyawan, tersimpan sebagai bukti dalam log aktivitas yang tidak bisa dimanipulasi.</p>
+        </div>
+
+        <div class="auth-visual__stats">
+            <div><strong>Face ID</strong><span>VERIFIKASI KEHADIRAN</span></div>
+            <div><strong>Real-time</strong><span>LOG AKTIVITAS</span></div>
+            <div><strong>Terenkripsi</strong><span>PENYIMPANAN DATA</span></div>
+        </div>
+    </aside>
+
+    <!-- Form login -->
+    <main class="auth-form-wrap">
+        <div class="auth-card">
+            <div data-brand class="brand" style="margin-bottom:28px;"></div>
+            <div class="auth-card__head">
+                <h2>Masuk ke akun Anda</h2>
+                <p>Gunakan email dan password terdaftar untuk mengakses riwayat ATD.</p>
+            </div>
+
+            <div id="loginAlert" class="alert"></div>
+
+            <form id="loginForm" novalidate>
+                <div class="field">
+                    <label for="loginEmail">Email Perusahaan</label>
+                    <input type="email" id="loginEmail" placeholder="nama@iceknodcorp.com" required>
+                </div>
+                <div class="field">
+                    <label for="loginPassword">Password</label>
+                    <input type="password" id="loginPassword" placeholder="••••••••" required minlength="8">
+                </div>
+                <button type="submit" id="loginSubmit" class="btn btn-primary">Masuk</button>
+            </form>
+
+            <p class="auth-switch">Belum punya akun? <a href="register.html">Daftar sebagai karyawan baru</a></p>
+        </div>
+    </main>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>

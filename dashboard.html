@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — iceKnodcorp ATD System</title>
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="css/style.css">
+<style>
+    .activity-list { list-style: none; margin: 0; padding: 0; }
+    .activity-list li { padding: 12px 0; border-bottom: 1px solid var(--line); display: grid; gap: 2px; }
+    .activity-list li:last-child { border-bottom: none; }
+    .activity-list strong { font-size: 0.82rem; text-transform: capitalize; }
+    .activity-list span { font-size: 0.8rem; color: var(--steel-gray); }
+    .activity-list time { font-size: 0.72rem; font-family: var(--font-mono); color: var(--steel-gray-2); }
+    .two-col { display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px; align-items: start; }
+    @media (max-width: 900px) { .two-col { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+    <div class="sidebar-scrim" id="sidebarScrim"></div>
+    <aside class="sidebar" id="sidebar">
+        <div data-brand class="brand"></div>
+
+        <nav class="nav-group">
+            <div class="nav-label">Menu</div>
+            <a class="nav-link active" href="dashboard.html">
+                <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 12l2-2 7-7 7 7 2 2M5 10v10h5v-6h4v6h5V10"/></svg>
+                Dashboard
+            </a>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <div class="user-chip__avatar" id="userInitial"></div>
+                <div class="user-chip__meta">
+                    <strong id="userName">—</strong>
+                    <span id="userRole">—</span>
+                </div>
+            </div>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn" style="width:100%;">Keluar</button>
+        </div>
+    </aside>
+
+    <main class="main">
+        <div class="mobile-topbar">
+            <button id="sidebarToggle" aria-label="Buka menu">☰</button>
+            <div data-brand class="brand"></div>
+            <span style="width:24px;"></span>
+        </div>
+
+        <div class="topbar">
+            <div>
+                <h1>Dashboard Absensi</h1>
+                <p>Rekam kehadiran Anda dengan verifikasi wajah setiap hari kerja.</p>
+            </div>
+        </div>
+
+        <!-- Digital clock hero -->
+        <section class="clock-hero">
+            <div>
+                <div class="clock-hero__time" id="clockTime">00:00:00</div>
+                <div class="clock-hero__date" id="clockDate">—</div>
+                <p id="todayStatusLabel" style="margin-top:14px; color:rgba(240,247,250,0.75); font-size:0.88rem;"></p>
+            </div>
+            <div class="clock-hero__actions">
+                <button id="checkInBtn" class="btn btn-accent">Check-in</button>
+                <button id="checkOutBtn" class="btn btn-primary">Check-out</button>
+            </div>
+        </section>
+
+        <div class="kpi-grid">
+            <div class="kpi-card"><span>Total Hadir</span><strong id="kpiHadir">0</strong></div>
+            <div class="kpi-card"><span>Total Telat</span><strong id="kpiTelat">0</strong></div>
+            <div class="kpi-card"><span>Total Rekap</span><strong id="kpiTotal">0</strong></div>
+            <div class="kpi-card"><span>Data Wajah</span><strong id="kpiDescriptor">—</strong></div>
+        </div>
+
+        <div class="two-col">
+            <section class="card">
+                <div class="card__head">
+                    <h3>Riwayat ATD Saya</h3>
+                </div>
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr><th>Tanggal</th><th>Check-in</th><th>Check-out</th><th>Skor Wajah</th><th>Status</th></tr>
+                        </thead>
+                        <tbody id="historyBody"></tbody>
+                    </table>
+                    <div class="empty-state" id="historyEmpty" style="display:none;">Belum ada riwayat absensi.</div>
+                </div>
+            </section>
+
+            <section class="card">
+                <div class="card__head"><h3>Log Aktivitas</h3></div>
+                <ul class="activity-list" id="activityList"></ul>
+            </section>
+        </div>
+    </main>
+</div>
+
+<!-- Modal verifikasi wajah untuk check-in / check-out -->
+<div class="modal-overlay" id="faceModal">
+    <div class="modal">
+        <div class="modal__head">
+            <h3 id="faceModalTitle">Verifikasi Wajah</h3>
+            <button class="modal__close" id="faceModalCloseX" aria-label="Tutup">&times;</button>
+        </div>
+
+        <div class="face-scan" id="checkFaceScan">
+            <video id="checkFaceVideo" muted playsinline></video>
+            <div class="face-scan__frame">
+                <div class="face-scan__corner face-scan__corner--tl"></div>
+                <div class="face-scan__corner face-scan__corner--tr"></div>
+                <div class="face-scan__corner face-scan__corner--bl"></div>
+                <div class="face-scan__corner face-scan__corner--br"></div>
+            </div>
+            <div class="face-scan__sweep"></div>
+            <div id="checkFaceStatus" class="face-scan__status state-idle"><span class="dot"></span>Menyiapkan kamera...</div>
+        </div>
+
+        <p class="hint">Wajah Anda akan dicocokkan otomatis dengan data terdaftar. Foto ini disimpan sebagai bukti kehadiran pada log aktivitas.</p>
+
+        <div style="display:flex; gap:10px; margin-top:16px;">
+            <button class="btn btn-ghost" id="faceCancelBtn">Batal</button>
+            <button class="btn btn-primary" id="faceConfirmBtn" disabled>Konfirmasi Absen</button>
+        </div>
+    </div>
+</div>
+
+<script defer src="https://cdn.jsdelivr.net/npm/@vladmandic/face-api/dist/face-api.js"></script>
+<script src="js/app.js"></script>
+<script src="js/face-verification.js"></script>
+<script src="js/dashboard.js"></script>
+</body>
+</html>
